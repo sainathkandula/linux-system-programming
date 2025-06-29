@@ -1,295 +1,1098 @@
-Table of contents
-- [Microcontroller vs Microprocessor](#-1.Microcontroller-vs-Microprocessor)
-- [Microcontroller vs SOC](#-2.Microcontroller-vs-SOC)
-- [How do you develop software for Microcontroller](#-3.How-do-you-develop-software-for-Microcontroller)
-- [Difference Between Compiler, Assembler, Linker, and Loader (C Program)](#-4.Difference-Between-Compiler,-Assembler,-Linker,-and-Loader) 
-- [Difference Between Compilation Error and Runtime Error](#-5.-Difference-Between-Compilation-Error-and-Runtime-Error)
-- [Relationship Between C Code, Assembly Language, Opcode, and Operand](#-6.Relationship-Between-C-Code,-Assembly-Language,-Opcode,-and-Operand)
-- [vi Editor Cheat Sheet](#-7.vi-Editor-Cheat-Sheet)
+# Process Management
 
-# 1.Microcontroller vs Microprocessor
-### Microcontroller (MCU)
-A **microcontroller** is a compact integrated circuit designed for **specific control tasks** in embedded systems. It includes:
-- **CPU** (Central Processing Unit)
-- **Memory** (RAM, ROM, Flash)
-- **I/O peripherals** (Timers, ADC, GPIO, UART, SPI, I2C)
+## Write a C program to demonstrate the use of fork() system call. 
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<sys/wait.h>
 
-### **Microprocessor (MPU)**
-A **microprocessor** is a standalone **CPU** that requires external components to function. It is used in **general-purpose computing** and lacks built-in memory or peripherals.
+int main()
+{
+        int pid;
+        printf("Before fork: Process ID is %d\n",getpid());
 
-### **Key Differences**
-| Feature | Microcontroller (MCU) | Microprocessor (MPU) |
-|---------|----------------------|----------------------|
-| **Integration** | CPU, memory, and peripherals on a single chip | Only CPU, requires external memory and peripherals |
-| **Application** | Embedded systems (IoT, automotive, appliances) | General-purpose computing (PCs, servers) |
-| **Power Consumption** | Low power, optimized for efficiency | Higher power, requires cooling solutions |
-| **Operating System** | Typically runs **bare-metal code** or **RTOS** | Runs **full OS** like Linux, Windows |
-| **Cost** | Lower cost due to integration | Higher cost due to external components |
-| **Performance** | Optimized for real-time control | High-speed processing for complex tasks |
+        pid=fork();
 
-### **Examples**
-- **Microcontrollers**: STM32, PIC, ATmega, ESP32
-- **Microprocessors**: Intel Core i7, AMD Ryzen, ARM Cortex-A
+        if(pid < 0)
+        {
+                perror("fork failed");
+                return 1;
+        }
+        else if(pid ==0)
+        {
+                printf("This is child process\n");
+                printf("Child PID: %d\n",getpid());
+                printf("Parent PID (from child): %d\n",getppid());
+        }
+        else
+        {
+                printf("This is the parent process\n");
+                printf("Parent PID: %d\n",getpid());
+                printf("Child PID (from parent) : %d\n",pid);
+        }
 
----
-
-# 2.Microcontroller vs SOC
-### **Microcontroller (MCU)**
-A **microcontroller** is a **single-chip solution** with a processor, memory, and basic peripherals designed for **specific control applications**.
-
-### **System-on-Chip (SoC)**
-A **SoC** integrates **multiple processing units (CPU, GPU, DSP), extensive memory, and specialized peripherals** into a single chip. It is used in **smartphones, routers, and high-end embedded systems**.
-
-### **Key Differences**
-| Feature | Microcontroller (MCU) | System-on-Chip (SoC) |
-|---------|----------------------|----------------------|
-| **Integration** | CPU, memory, and basic peripherals | CPU, GPU, DSP, memory, and advanced peripherals |
-| **Application** | Simple embedded tasks (sensor control, automation) | Complex computing (smartphones, AI, networking) |
-| **Power Consumption** | Low power, optimized for efficiency | Higher power, varies by application |
-| **Operating System** | Runs **bare-metal code** or **RTOS** | Runs **full OS** like Linux, Android, Windows |
-| **Performance** | Limited processing power | High-performance computing with multiple cores |
-| **Cost** | Lower cost due to simplicity | Higher cost due to advanced features |
-
-### **Examples**
-- **Microcontrollers**: STM32, ATmega, ESP32
-- **SoCs**: Qualcomm Snapdragon, Apple M-Series, NVIDIA Jetson, Raspberry Pi Broadcom SoCs
-
-# 3.How do you develop software for Microcontroller
-
-- Keil IDE : Integrated Development Environment
-  -  collection of tools like text editor, compiler , linker, debugger.
-- C programs  - H/W doesn't understand C statements
-  -  (Highlevel level language )convert the c code to machine understandable language (low level language)
-  -  .c --> .s (assembly code file) --> .o (object code file).
-  -  compiler which converts highlevel language to low level language.
-- Software development done in host development PC and generate binaries / executables / images.
-- These binaries will be loaded in Target H/W Platform
-
-# 4.Difference Between Compiler, Assembler, Linker, and Loader
-
-## 1. Compiler
-- Translates **C source code** into **assembly language**.
-- Checks for syntax errors and optimizes the code.
-- Example: Converts `printf("Hello, World!");` into assembly instructions.
-
-## 2. Assembler
-- Converts **assembly code** into **machine code** (binary format).
-- Produces an **object file** (`.o` or `.obj`).
-- Example: Converts assembly instructions into binary instructions that the CPU understands.
-
-## 3. Linker
-- Combines multiple **object files** and **library files** into a single **executable file** (`.exe` or `.out`).
-- Resolves function calls (e.g., linking `printf()` from the standard library).
-- Example: If your program uses multiple `.o` files, the linker merges them into one executable.
-
-## 4. Loader
-- Loads the **executable file** into memory for execution.
-- Allocates memory and sets up the program's runtime environment.
-- Example: When you run `./a.out`, the loader places the program in memory and starts execution.
-
-
-# 5. Difference Between Compilation Error and Runtime Error
-
-## **Key Differences**
-
-| Feature            | Compilation Error | Runtime Error |
-|--------------------|------------------|--------------|
-| **When it occurs** | During compilation | During program execution |
-| **Cause** | Syntax errors, type mismatches, missing declarations | Invalid operations like division by zero, accessing invalid memory |
-| **Detection** | Identified by the compiler before execution | Occurs while the program is running |
-| **Examples** | Missing semicolon, undeclared variable, incorrect function call | Division by zero, accessing an array out of bounds, null pointer dereference |
-| **Fixing** | Must be corrected before running the program | Requires debugging after execution |
-
-# Opcode and Operand in C Programming
-
-## 1. **Opcode and Operand**
-In **C programming**, while we don’t directly interact with **opcodes and operands**, they are fundamental concepts in assembly language and machine-level programming.
-
-## 2. **Definitions**
-- **Opcode (Operation Code)**: Specifies the operation to be performed by the processor. Example: `ADD`, `MOV`, `SUB`.
-- **Operand**: Represents the **data** or **memory location** on which the operation is performed.
-
-## 3. **Example**
-Assembly instruction:
-```assembly
-ADD R1, R2
-```
-
-# 6.Relationship Between C Code, Assembly Language, Opcode, and Operand
-
-## 1. **Overview**
-- **C programming** is a high-level language that allows structured and readable code.
-- **Assembly language** provides a low-level representation of CPU instructions.
-- **Opcodes and operands** are core components of machine code.
-
-## 2. **Translation Process**
-### **C Code → Assembly Language → Machine Code**
-1. **C Code** is compiled into **assembly language** by a compiler.
-2. **Assembly code** is translated into **machine code** by an assembler.
-3. **Machine code** consists of **opcodes** (instructions) and **operands** (data/memory locations).
-
-### Example:
-c code:
-```c
-#include <stdio.h>
-int main() {
-    int a = 5, b = 10;
-    int sum = a + b;
-    printf("Sum: %d\n", sum);
-    return 0;
+        return 0;
 }
-```
-assembly code:
-```assembly
-MOV R0, #5    ; Load value 5 into Register R0
-MOV R1, #10   ; Load value 10 into Register R1
-ADD R2, R0, R1 ; Add R0 and R1, store result in R2
-```
-opcodes and operands:
-```opcode
-E3A00005  ; MOV R0, #5
-E3A0100A  ; MOV R1, #10
-E0802001  ; ADD R2, R0, R1
-```
 
-### Execution Flow
-1. Write code on the development machine.
-2. Compile using a compiler to generate object files.
-3. The linker merges them into an executable.
-4. The loader transfers the executable to the target board, where it runs.
+## Write a C program to illustrate the use of the execvp() function. 
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<sys/wait.h>
 
-```
-Kiel IDE which has text editor , compiler , linker/loader , debugger which is used for
-software development of Microcontroller and not for SOC
-```
-# 7.vi Editor Cheat Sheet
+int main()
+{
+        int pid;
+        char *args[]={"ls","-l",NULL};
 
-## Introduction
-The `vi` editor is a powerful text editor available on Unix-based systems. It operates in **two primary modes**:
-1. **Command Mode** – Used for administrative tasks like saving, exiting, cutting, copying, pasting, replacing, and searching.
-2. **Insert Mode** – Used for writing and editing text.
+        pid=fork();
+        if(pid < 0)
+        {
+                perror("fork failed");
+                return 1;
+        }
 
-By default, the `vi` editor opens in **Command Mode**.
+        if(pid == 0)
+        {
+                printf("Child process is running 'ls -l' using execvp()\n");
+                execvp(args[0],args);
+                perror("execvp failed");
+                return 1;
+        }
+        else
+        {
+                wait(NULL);
+                printf("Child process completed\n");
+        }
+        return 0;
+}
 
----
 
-## Opening a File
-To open or create a file using `vi`, use the following command:
-```sh
-vi filename
-```
-If the file exists, it will open in **Command Mode**.
+## Write a program in C to create a child process using fork() and print its PID.
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/wait.h>
 
----
+int main()
+{
+        int pid;
+        int status = 0;
+        pid=fork();
+        if(pid < 0)
+        {
+                perror("fork failed");
+                return 1;
+        }
+        if(pid == 0 )
+        {
+                printf("This is child process\n");
+                printf("Child PID : %d\n",getpid());
+                printf("Parent PID (from child)) : %d\n",getppid());
+                sleep(2);
+        }
+        else
+        {
+                printf("This is parent process\n");
+                printf("Parent PID: %d\n",getpid());
+                printf("Child PID(from parent) :%d\n",pid);
+                wait(&status);
+                printf("Child terminated with exit code : %d\n",WEXITSTATUS(status));
+        }
+        return 0;
+}
 
-## Switching Between Modes
-- **Command Mode → Insert Mode**  
-  Press one of the following keys:
-  - `i` (insert at cursor)
-  - `a` (append after cursor)
-  - `o` (open a new line below)
-  - `O` (open a new line above)
 
-- **Insert Mode → Command Mode**  
-  Press the `ESC` key.
+##  Write a C program to create multiple child processes using fork() and display their 
+PIDs.
+c
+#include<stdio.h>
+#include<sys/wait.h>
+#include<unistd.h>
+#include<stdlib.h>
+#define CHILDS 5
+int main()
+{
+        int pid;
 
----
+        for(int i=0;i<CHILDS;i++)
+        {
+                pid = fork();
 
-## Basic Operations
-### Exiting `vi`
-| Command       | Description                |
-|--------------|----------------------------|
-| `:q`         | Quit without saving        |
-| `:q!`        | Quit and discard changes   |
-| `:wq` or `ZZ` | Save and exit              |
+                if(pid < 0)
+                {
+                        perror("fork failed");
+                        exit(1);
+                }
+                else if(pid == 0)
+                {
+                        printf("Child %d: PID = %d,Parent PID =%d\n",i+1,getpid(),getppid());
+                        return 0;
+                }
+        }
 
-### Saving Changes
-| Command | Description |
-|---------|-------------|
-| `:w`    | Save file   |
+        for(int i=0;i < CHILDS ;i++)
+        {
+                wait(NULL);
+        }
+        return 0;
+}
 
-**Note:** Save operations cannot be performed in **Insert Mode**. Press `ESC` first to return to **Command Mode** before saving.
 
----
+## Write a program in C to create a zombie process ?
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/types.h>
+#include<unistd.h>
+#include<sys/wait.h>
 
-## Editing Text
-### Inserting and Appending
-| Command | Description |
-|---------|-------------|
-| `i`     | Insert text at cursor |
-| `I`     | Insert at the beginning of the line |
-| `a`     | Append after cursor |
-| `A`     | Append at the end of the line |
-| `o`     | Open a new line below |
-| `O`     | Open a new line above |
+int main()
+{
+        pid_t pid = fork();
 
-### Deleting and Copying
-| Command | Description |
-|---------|-------------|
-| `x`     | Delete character under cursor |
-| `dw`    | Delete a word |
-| `dd`    | Delete the current line |
-| '4dd'   | Delete 4 lines |
-| `yy`    | Copy the current line |
-| `2yy`   | Copy two lines |
-| 'yw'    | Copy word |
-| '2yw'   | Copy two words |
-| `p`     | Paste copied/deleted content |
+        if(pid < 0)
+        {
+                perror("fork failed");
+                return 1;
+        }
 
----
+        if(pid == 0)
+        {
+                printf("Child Process (PID: %d) is exiting\n",getpid());
+                sleep(5);
+                printf("Parent PID(from child) : %d\n",getppid());
+        }
+        else
+        {
+                printf("This is Parent proccess PID :%d\n",getpid());
+                printf("Now it is ZOMBIE : Child PID : %d\n",pid);
+        }
+        return 0;
+}
 
-## Searching and Navigation
-| Command | Description |
-|---------|-------------|
-| `/pattern`  | Search forward for "pattern" |
-| `?pattern`  | Search backward for "pattern" |
-| `n`         | Repeat search in same direction |
-| `N`         | Repeat search in opposite direction |
-| `G`         | Jump to the last line |
-| `gg`        | Jump to the first line |
-| `Ctrl + f`  | Scroll forward one screen |
-| `Ctrl + b`  | Scroll backward one screen |
+## Write a C program to demonstrate the use of the waitpid() function for process synchronization. 
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/wait.h>
+#include<sys/types.h>
+#include<stdlib.h>
 
----
+int main()
+{
+        pid_t pid;
+        pid = fork();
+        if(pid < 0)
+        {
+                perror("fork failed");
+                return 1;
+        }
+        if(pid == 0)
+        {
+                sleep(3);
+                printf("\n[Child] PID :%d\n",getpid());
+                printf("[Child] Parent PID:%d\n",getppid());
+        }
+        else
+        {
+                printf("[Parent] PID : %d\n",getpid());
+                printf("[Parent] Created child with PID :%d\n",pid);
+                printf("[Parent] Waiting for child to complete...\n");
 
-## Undo and Redo
-| Command | Description |
-|---------|-------------|
-| `u`     | Undo last change |
-| `Ctrl + r` | Redo undone change |
+                waitpid(pid,NULL,0);
 
----
+                printf("\n[Parent] Child has completed.\n");
+        }
+        return 0;
+}
 
-## Miscellaneous Commands
-| Command | Description |
-|---------|-------------|
-| `:set number` | Show line numbers |
-|  ':25' | move to specific line number|
-| `:set nonumber` | Hide line numbers |
-| `:%s/old/new/g` | Replace "old" with "new" in the entire file |
 
----
+##  Write a program in C to create a daemon process. 
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<fcntl.h>
+#include<time.h>
 
-## Summary
-The `vi` editor is a versatile tool widely used for editing files in Linux environments. Mastering its modes and commands enhances productivity, making it an essential skill for developers and system administrators.
+int main()
+{
+        pid_t pid;
+        printf("Running Process PID :%d\n",getpid());
+        pid=fork();
 
-## 🔹 Tip: Termainal keyboard shortcut  
-**Keyword:** `Terminal shot cuts`
+        if(pid < 0)
+        {
+                perror("fork failed");
+                exit(EXIT_FAILURE);
+        }
 
-Expanding the screen of Terminal
+        if(pid > 0)
+        {
+                printf("Daemon PID: %d\n",pid);
+                exit(EXIT_SUCCESS);
+        }
 
-```
-cmd+shift+'+'
-```
-Minimize the screen of  Terminal
-```
-cmd+'-'
-```
+        if(setsid() < 0)
+        {
+                perror("setsid failed");
+                exit(EXIT_FAILURE);
+        }
 
-- a.out stands for Assembler output
-- gcc sample.c will generate a.out
-- Execute './a.out'
-## 🔹 Interview Question: why we need './' for executable command ./a.out?
-### 📌 Answer:
-- When executing ./a.out, the ./ explicitly tells the shell to look for the executable in the current directory. This is needed because the shell does not search the current directory by default unless it's in $PATH. It also prevents conflicts with other system executables that might have the same name.
+        chdir("/");
+
+        umask(0);
+
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
+
+        while(1)
+        {
+                int fd = open("/tmp/daemon_demo.log",O_WRONLY | O_CREAT | O_APPEND,0644);
+                if( fd != -1)
+                {
+                        time_t now = time(NULL);
+                        dprintf(fd,"Daemon active at : %s",ctime(&now));
+                        close(fd);
+                }
+                sleep(5);
+        }
+        return 0;
+}
+
+##  Write a C program to demonstrate the use of the system() function for executing shell commands. 
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<stdlib.h>
+
+int main()
+{
+        printf("Executing 'ls -l' using system call\n");
+        system("ls -l");
+        printf("Creating new directory 'paradise' using system call\n");
+        system("mkdir paradise");
+        printf("System call execcuted successfully!\n");
+        return 0;
+}
+
+##  Write a C program to create a process using fork() and pass arguments to the child process. 
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/wait.h>
+#include<stdlib.h>
+
+int main()
+{
+        int pid;
+        pid=fork();
+
+        if(pid < 0)
+        {
+                perror("fork failed");
+                return 1;
+        }
+
+        if(pid == 0)
+        {
+                printf("Child Process PID :%d\n",getpid());
+                printf("Executing 'ls -l using execlp()\n");
+
+                execlp("ls","ls","-l",NULL);
+                perror("execlp failed");
+                exit(EXIT_FAILURE);
+        }
+        else
+        {
+                printf("Parent Process PID: %d\n",getpid());
+                printf("Created Child with PID : %d\n",pid);
+                wait(NULL);
+                printf("Child process finished\n");
+        }
+        return 0;
+
+}
+
+##  Write a program in C to demonstrate process synchronization using semaphores.
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<sys/sem.h>
+#include<sys/ipc.h>
+#include<sys/wait.h>
+
+union sem
+{
+        int val;
+};
+
+int main()
+{
+        key_t key=ftok("semfile",65);
+        int semid=semget(key,1, 0666 |IPC_CREAT);
+
+        union sem u;
+        u.val = 1;
+        semctl(semid,0,SETVAL,u);
+
+        pid_t pid = fork();
+
+        struct sembuf p ={0,-1,0};
+        struct sembuf v ={0,1,0};
+
+        if(pid == 0)
+        {
+                semop(semid, &p,1);
+                printf("Child in critical section\n");
+                sleep(2);
+                printf("Child leaving critical section\n");
+                semop(semid,&v,1);
+        }
+        else
+        {
+                semop(semid,&p,1);
+                printf("Parent in critical section\n");
+                sleep(2);
+                printf("Parent leaving critical section\n");
+                semop(semid,&v,1);
+                wait(NULL);
+                semctl(semid,0,IPC_RMID);
+        }
+        return 0;
+}
+
+## Write a C program to demonstrate the use of the execvpe() function. 
+c
+#define _GNU_SOURCE
+#include<unistd.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/types.h>
+#include<sys/wait.h>
+
+
+int main()
+{
+        int pid = fork();
+        if(pid == 0)
+        {
+                printf("We're in child process\n");
+                printf("Executing execvpe()\n");
+
+                char *args[]={"ls","-l",NULL};
+                char *envp[]={
+                        "MYVAR=HelloWorld",
+                        NULL
+                };
+                execvpe("ls",args,envp);
+                perror("execvpe failed");
+                return 1;
+        }
+        else if(pid > 0)
+        {
+                printf("This is parent process\n");
+                printf("Waiting for the child to complete...\n");
+                wait(NULL);
+                printf("Child has completed.\n");
+        }
+        else
+        {
+                perror("fork failed");
+                return 1;
+        }
+        return 0;
+}
+
+## Write a C program to create a process group and change its process group ID (PGID). 
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<sys/wait.h>
+#include<sys/types.h>
+
+int main()
+{
+        pid_t pid,pgid;
+        pid=fork();
+
+        if(pid < 0)
+        {
+                perror("fork failed");
+                exit(EXIT_FAILURE);
+        }
+
+        if(pid == 0)
+        {
+                printf("\n[Child] Before changing PGID :\n");
+                printf("PID = %d\n",getpid());
+                printf("PGID = %d\n",getpgrp());
+
+                if(setpgid(0,0) == -1)
+                {
+                        perror("setpgid failed in child");
+                        exit(EXIT_FAILURE);
+                }
+
+                printf("[Child] After changing PGID : \n");
+                printf("PID = %d\n",getpid());
+                printf("PGID = %d\n",getpgrp());
+
+                sleep(2);
+                exit(EXIT_SUCCESS);
+        }
+        else
+        {
+                sleep(1);
+
+                printf("\n[Parent]\n");
+                printf("PID = %d\n",getpid());
+                printf("Child PID : %d\n",pid);
+                printf("Parent PGID = %d\n",getpgrp());
+
+                pgid=getpgid(pid);
+                if(pgid == -1)
+                {
+                        perror("getpgid failed in parent");
+                }
+                else
+                {
+                        printf("Child's PGID = %d\n",pgid);
+                }
+                wait(NULL);
+        }
+        return 0;
+}
+
+##  Write a program in C to demonstrate inter-process communication (IPC) using shared memory. 
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<stdlib.h>
+#include<sys/ipc.h>
+#include<sys/shm.h>
+#include<string.h>
+#include<sys/types.h>
+#include<sys/wait.h>
+
+#define SHM_SIZE 1024
+
+int main()
+{
+        int key;
+        int shmid;
+        char *shm_ptr;
+
+        key=ftok("/tmp",65);
+
+        if(key == -1)
+        {
+                perror("frok");
+                exit(EXIT_FAILURE);
+        }
+
+        shmid=shmget(key,SHM_SIZE,0666 | IPC_CREAT);
+        if(shmid < 0)
+        {
+                perror("shmget");
+                exit(EXIT_FAILURE);
+        }
+
+        pid_t pid = fork();
+
+        if(pid < 0)
+        {
+                perror("fork failed");
+                exit(EXIT_FAILURE);
+        }
+
+        if(pid == 0)
+        {
+                sleep(1);
+
+                shm_ptr=(char *)shmat(shmid,NULL,0);
+                if(shm_ptr == (char *)(-1))
+                {
+                        perror("shmat in child");
+                        exit(EXIT_FAILURE);
+                }
+                printf("[Child] Data read from shared memory: \"%s\"\n",shm_ptr);
+
+                shmdt(shm_ptr);
+                exit(EXIT_SUCCESS);
+        }
+        else
+        {
+                shm_ptr = (char *)shmat(shmid,NULL,0);
+                if(shm_ptr == (char *)(-1))
+                {
+                        perror("shmat in parent");
+                        exit(EXIT_FAILURE);
+                }
+                const char *msg = "Hey!,my Child";
+                strncpy(shm_ptr,msg,SHM_SIZE);
+                printf("[Parent] Data written to shared memory: \"%s\"\n",msg);
+
+                wait(NULL);
+
+                shmdt(shm_ptr);
+                shmctl(shmid,IPC_RMID,NULL);
+        }
+
+        return 0;
+}
+
+## Write a C program to create a child process using vfork() and demonstrate its usage. 
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<sys/types.h>
+
+int global = 10;
+int main()
+{
+        pid_t pid;
+        int local = 5;
+
+        pid= vfork();
+
+        if(pid < 0)
+        {
+                perror("vfork");
+                exit(EXIT_FAILURE);
+        }
+
+        if(pid == 0)
+        {
+                printf("[Child] PID = %d, PPID = %d\n",getpid(),getppid());
+
+                global = global + global;
+                local = local + local;
+
+                printf("[Child] Modified global = %d, local = %d\n",global,local);
+                _exit(0);
+        }
+        else
+        {
+                printf("[Parent] PID = %d\n",getpid());
+                printf("[Parent] global = %d,local = %d\n",global,local);
+        }
+        return 0;
+}
+
+##  Write a C program to create a pipeline between two processes using the pipe() system call.
+c
+#include<stdio.h>
+#include<unistd.h>
+#include<stdlib.h>
+#include<string.h>
+#include<sys/types.h>
+
+
+int main()
+{
+        int pipefd[2];
+
+        int pid;
+        char buffer[100];
+
+        if(pipe(pipefd) == -1)
+        {
+                perror("pipe");
+                exit(EXIT_FAILURE);
+        }
+
+        pid = fork();
+
+        if(pid < 0)
+        {
+                perror("fork");
+                exit(EXIT_FAILURE);
+        }
+
+        if (pid == 0)
+        {
+                close(pipefd[1]);
+
+                read(pipefd[0],buffer,sizeof(buffer));
+                printf("[Child] Received message : \"%s\"\n",buffer);
+
+                close(pipefd[1]);
+        }
+        else
+        {
+                close(pipefd[0]);
+
+                const char *data= "Hello! How are you child?";
+                write(pipefd[1],data,strlen(data)+1);
+                printf("[Parent] Sent message through pipe\n");
+                close(pipefd[1]);
+                exit(EXIT_SUCCESS);
+        }
+        return 0;
+}
+
+##  Write a C program to demonstrate the use of the clone() system call to create a thread.
+c
+#define _GNU_SOURCE
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<sched.h>
+#include<unistd.h>
+#include<sys/wait.h>
+
+#define STACK_SIZE 1024 * 1024
+
+int thread(void *arg)
+{
+        printf("Child thread : %s\n",(char*)arg);
+        return 0;
+}
+int main()
+{
+        char *stack=malloc(STACK_SIZE);
+        if(!stack)
+        {
+                perror("malloc");
+                exit(1);
+        }
+
+        char *message = "Hello from clone!";
+        int clone_flags=SIGCHLD;
+
+        pid_t pid=clone(thread,stack+STACK_SIZE,clone_flags,message);
+        if(pid == -1)
+        {
+                perror("clone");
+                free(stack);
+                exit(1);
+        }
+        waitpid(pid,NULL,0);
+        printf("Main: child thread has exited\n");
+
+        free(stack);
+        return 0;
+}
+
+## Write a C program to create a child process using fork() and communicate between parent and child using pipes. 
+c
+#include<stdio.h>
+#include<fcntl.h>
+#include<unistd.h>
+#include<stdlib.h>
+#include<string.h>
+#include<sys/wait.h>
+
+int main()
+{
+        int fds[2];
+        int pid;
+        char buffer[100];
+        if(pipe(fds) == -1)
+        {
+                perror("pipe");
+                exit(1);
+        }
+        pid=fork();
+        if(pid < 0)
+        {
+                perror("fork");
+                exit(1);
+        }
+
+        if(pid == 0)
+        {
+                close(fds[1]);
+                read(fds[0],buffer,sizeof(buffer));
+                printf("Child received : %s\n",buffer);
+                close(fds[0]);
+        }
+        else
+        {
+                close(fds[0]);
+                char *msg="Pipe : Hey! Child";
+                write(fds[1],msg,strlen(msg)+1);
+                close(fds[1]);
+                wait(NULL);
+                printf("Child has read\n");
+        }
+        return 0;
+}
+
+##  Write a C program to demonstrate process synchronization using the fork() and wait() system calls. 
+c
+#include<stdio.h>
+#include<sys/wait.h>
+#include<unistd.h>
+#include<stdlib.h>
+
+
+int main()
+{
+        int pid;
+        pid=fork();
+        if(pid < 0)
+        {
+                perror("fork");
+                exit(1);
+        }
+
+        if(pid == 0)
+        {
+                printf("[Child] This is child process\n");
+                sleep(2);
+                printf("[Child] I got some tasks to do wait!\n");
+                sleep(2);
+                printf("[Child] Tasks are completed.\n");
+        }
+        else
+        {
+                printf("[Parent] This is Parent process\n");
+                printf("[Parent] Waiting for child to finish\n");
+                wait(NULL);
+                printf("[Parent] Child has completed its tasks!\n");
+        }
+        return 0;
+}
+
+## Write a C program to create a child process using fork() and demonstrate inter-process communication (IPC) using shared memory.
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/ipc.h>
+#include<sys/shm.h>
+#include<sys/types.h>
+#include<sys/wait.h>
+#include<string.h>
+#include<unistd.h>
+
+#define KEY 200211
+#define SHM_SIZE 1024
+
+int main()
+{
+        int shmid;
+        char *data;
+
+        shmid=shmget(KEY,SHM_SIZE,0666 | IPC_CREAT);
+        if(shmid < 0)
+        {
+                perror("shmget");
+                exit(1);
+        }
+
+        pid_t pid = fork();
+        if(pid < 0)
+        {
+                perror("fork");
+                exit(1);
+        }
+        else if(pid == 0)
+        {
+                data = (char*)shmat(shmid,NULL,0);
+                if(data == (char*)-1)
+                {
+                        perror("shmat");
+                        exit(1);
+                }
+                printf("[Child] Reading from shared memory : \"%s\"\n",data);
+                shmdt(data);
+        }
+        else
+        {
+                data= (char*)shmat(shmid,NULL,0);
+                if(data == (char*)-1)
+                {
+                        perror("shmat");
+                        exit(1);
+                }
+
+                strcpy(data, "Hello from parent via shared memory!");
+                wait(NULL);
+                shmdt(data);
+                shmctl(shmid,IPC_RMID,NULL);
+        }
+        return 0;
+}
+
+## Write a C program to create a child process using fork() and demonstrate process synchronization using semaphores.
+c
+#include<stdio.h>
+#include<sys/sem.h>
+#include<sys/wait.h>
+#include<sys/ipc.h>
+#include<unistd.h>
+#include<stdlib.h>
+
+#define SEM_KEY 200211
+#define SEM_SIZE 1024
+
+union semun
+{
+        int val;
+};
+
+int main()
+{
+        int semid = semget(SEM_KEY, SEM_SIZE,0666 | IPC_CREAT);
+
+        union semun sem;
+        sem.val = 0;
+        semctl(semid,0,SETVAL,sem);
+        struct sembuf p = {0,-1,0};
+        struct sembuf v = {0,1,0};
+
+        pid_t pid = fork();
+        if(pid == 0)
+        {
+                printf("[Child] Doing some tasks..\n");
+                sleep(2);
+                printf("[Child] Signaling parent..\n");
+                semop(semid,&v,1);
+        }
+        else
+        {
+                printf("[Parent] Waiting for child..\n");
+                semop(semid,&p,1);
+                printf("[Parent] Received signal from child\n");
+                wait(NULL);
+                semctl(semid,0,IPC_RMID);
+        }
+        return 0;
+}
+
+## Write a C program to create a child process using fork() and demonstrate process communication using message queues. 
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/ipc.h>
+#include<sys/msg.h>
+#include<unistd.h>
+#include<string.h>
+#include<sys/wait.h>
+
+#define KEY 200211
+#define SIZE 1024
+
+struct message
+{
+        long m_type;
+        char data[SIZE];
+};
+
+int main()
+{
+        int msgid;
+        struct message msg;
+        msgid = msgget(KEY,0666 | IPC_CREAT);
+        if(msgid == -1)
+        {
+                perror("msgget");
+                exit(1);
+        }
+
+        pid_t pid = fork();
+        if(pid < 0)
+        {
+                perror("fork");
+                exit(1);
+        }
+        else if(pid == 0)
+        {
+                msg.m_type = 1;
+                strcpy(msg.data,"Hello from child process!");
+                msgsnd(msgid,&msg,sizeof(msg.data),0);
+                printf("[Child] Message sent to parent\n");
+        }
+        else
+        {
+                wait(NULL);
+                msgrcv(msgid,&msg,sizeof(msg.data),1,0);
+                printf("[Parent] Received message: \"%s\"\n",msg.data);
+                msgctl(msgid,IPC_RMID,NULL);
+        }
+        return 0;
+}
+
+## Write a C program to create a child process using fork() and demonstrate process communication using sockets. 
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<sys/socket.h>
+#include<string.h>
+#include<errno.h>
+
+#define SIZE 1024
+
+int main()
+{
+        int sv[2];
+        pid_t pid;
+        char buffer[SIZE];
+
+        if(socketpair(AF_UNIX,SOCK_STREAM,0,sv) == -1)
+        {
+                perror("socketpair");
+                exit(EXIT_FAILURE);
+        }
+
+        pid =fork();
+        if(pid < 0)
+        {
+                perror("fork");
+                exit(EXIT_FAILURE);
+        }
+
+        if(pid == 0)
+        {
+                close(sv[0]);
+                const char *child_msg = "Hello from child!";
+                send(sv[1],child_msg,strlen(child_msg) + 1,0);
+                recv(sv[1],buffer,SIZE,0);
+                printf("Child received: %s\n",buffer);
+                close(sv[1]);
+        }
+        else
+        {
+                close(sv[1]);
+                recv(sv[0],buffer,SIZE,0);
+                printf("Parent received : %s\n",buffer);
+                const char *parent_msg = "Hello from parent!";
+                send(sv[0],parent_msg,strlen(parent_msg) + 1,0);
+                close(sv[0]);
+        }
+        return 0;
+}
+
+## Write a C program to create a child process using fork() and demonstrate process synchronization using mutexes. 
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<pthread.h>
+#include<unistd.h>
+#include<sys/mman.h>
+#include<sys/wait.h>
+
+int main()
+{
+        pthread_mutex_t *mutex = mmap(NULL,sizeof(pthread_mutex_t),PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1,0);
+
+        pthread_mutexattr_t attr;
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_setpshared(&attr,PTHREAD_PROCESS_SHARED);
+
+        pthread_mutex_init(mutex,&attr);
+
+        pid_t pid = fork();
+
+        if(pid < 0)
+        {
+                perror("fork");
+                exit(EXIT_FAILURE);
+        }
+        if(pid == 0)
+        {
+                pthread_mutex_lock(mutex);
+                printf("[Child] This is Child.\n");
+                pthread_mutex_unlock(mutex);
+        }
+        else
+        {
+                wait(NULL);
+                pthread_mutex_lock(mutex);
+                printf("[Parent] This is Parent.\n");
+                pthread_mutex_unlock(mutex);
+
+
+                pthread_mutex_destroy(mutex);
+                pthread_mutexattr_destroy(&attr);
+
+                munmap(mutex,sizeof(pthread_mutex_t));
+        }
+        return 0;
+}
+
+## Write a C program to create a child process using fork() and demonstrate process communication using named pipes (FIFOs). 
+c
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<sys/stat.h>
+#include<sys/types.h>
+#include<string.h>
+#include<sys/wait.h>
+
+#define FIFO "/tmp/my_fifo"
+#define SIZE 100
+int main()
+{
+
+        unlink(FIFO);
+        if(mkfifo(FIFO,0666) == -1)
+        {
+                perror("mkfifo");
+                exit(EXIT_FAILURE);
+        }
+
+        pid_t pid = fork();
+        if(pid < 0)
+        {
+                perror("fork failed");
+                exit(EXIT_FAILURE);
+        }
+        else if(pid == 0)
+        {
+                char buffer[SIZE];
+                int fd = open(FIFO,O_RDONLY);
+                if(fd == -1)
+                {
+                        perror("Child : open FIFO for reading");
+                        exit(EXIT_FAILURE);
+                }
+
+                int n = read(fd,buffer,SIZE-1);
+                if(n > 0)
+                {
+                        buffer[n] = '\0';
+                        printf("Child received : %s\n",buffer);
+                }
+                else
+                {
+                        perror("Child : Read");
+                }
+                close(fd);
+                exit(0);
+        }
+        else
+        {
+                const char *msg = "Hello from parent process!";
+                int fd = open(FIFO,O_WRONLY);
+                if(fd == -1)
+                {
+                        perror("Parent: open FIFO for writing");
+                        exit(EXIT_FAILURE);
+                }
+                write(fd,msg,strlen(msg));
+                close(fd);
+
+                wait(NULL);
+
+                unlink(FIFO);
+        }
+        return 0;
+}
+
   
