@@ -46,14 +46,7 @@ When you press the power button on a computer or mobile device, a series of step
 
 ##  Step 4: Loading the Bootloader  
 - The system reads the first tiny part of the selected storage.  
-- This part is called the MBR (Master Boot Record).
-
-
-**What is the MBR?**  
-- MBR is a small block (first 512 bytes) at the start of the disk.  
-- It contains:  
-  - A tiny program (bootloader stage 1).  
-  - A partition table (map of the disk).  
+- This part is called the MBR (Master Boot Record).  
 
 **What Happens Next?**  
 - The tiny bootloader code in the MBR is copied into RAM.  
