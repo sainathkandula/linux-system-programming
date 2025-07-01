@@ -8,6 +8,7 @@ When you press the power button on a computer or mobile device, a series of step
 - The Power Supply Unit (PSU) activates.
 - Electricity flows to all key components: *CPU, RAM, motherboard, storage*, etc.
 - The CPU receives power but *cannot start immediately* because there are no instructions in RAM yet.
+```
 
 
 
