@@ -3,23 +3,35 @@
 When you press the power button on a computer or mobile device, a series of steps are triggered to load the operating system (OS). This process is known as booting. Below is a detailed breakdown of what happens during booting:
 ```
 
-## Step 1: Power Supply Turns On  
-- The Power Supply Unit (PSU) activates.  
-- Electricity flows to all key components: CPU, RAM, motherboard, storage, etc.  
-- The CPU receives power but cannot start immediately because it has no instructions in RAM yet.
+# Computer Booting Process – Step 1 & 2
 
+## Step 1: Power Supply Turns On  
+- The **Power Supply Unit (PSU)** activates.  
+- Electricity flows to all essential components:  
+  - **CPU**  
+  - **RAM**  
+  - **Motherboard**  
+  - **Storage devices** (HDD/SSD/eMMC)  
+- The **CPU** now has power, but it cannot start immediately because **RAM is empty**.  
+- It needs initial instructions, which are **not in RAM**, but stored elsewhere.
+```
 
 ## 🧠 Step 2: Boot ROM / BIOS Runs (Startup Program)  
-- The CPU looks for the first instructions to execute.  
-- These instructions are stored in a special non-volatile memory called:  
-  - BIOS (Basic Input/Output System) in older systems.  
-  - Boot ROM in embedded or mobile systems.  
+- The **CPU** looks for the **first set of instructions** to execute.  
+- These instructions are located in special **non-volatile memory**, which means the data is not lost when power is off.
+There are two types of this memory:
+- **BIOS (Basic Input/Output System)** – used in older or traditional PCs.
+- **Boot ROM** – used in modern mobile devices and embedded systems.
+```
 
-**Purpose of Boot ROM/BIOS:**  
-- It performs a Power-On Self Test (POST):  
-  - Checks if RAM, CPU, keyboard, display, etc. are working.  
-  - Initializes hardware components.  
-- It is not stored in RAM, but in ROM, because RAM is empty and volatile at startup.
+### 🔍 Purpose of Boot ROM / BIOS:
+- It performs the **Power-On Self Test (POST)**:  
+  - Verifies if **RAM**, **CPU**, **keyboard**, **display**, and other components are functioning properly.  
+  - Initializes basic hardware and communication interfaces.
+- These instructions are stored in **ROM (Read-Only Memory)**, **not RAM**, because:  
+  - **RAM is volatile** and empty at startup.  
+  - **ROM is permanent** and always available, even when the device is off.
+
 ```
 
 ## 💽 Step 3: Locating Bootable Storage  
