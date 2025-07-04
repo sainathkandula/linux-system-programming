@@ -103,7 +103,7 @@ Because of its flexibility and wide device support, Android is the **most used m
 ## Andriod booting process
 ---
 
-## ✅ 1. Boot ROM
+## 1. Boot ROM
 
 - **Boot ROM** stands for **Boot Read-Only Memory**.
 - It is the **first code** that runs when the device is powered on.
@@ -112,7 +112,7 @@ Because of its flexibility and wide device support, Android is the **most used m
 
 ---
 
-## ✅ 2. Bootloader
+##  2. Bootloader
 
 - A small program that prepares the device to load the kernel.
 - **Two stages**:
@@ -120,13 +120,13 @@ Because of its flexibility and wide device support, Android is the **most used m
   - **Secondary Bootloader (U-Boot/Fastboot)**:
     - Loads the **kernel** and **device tree**.
 
-### 📘 Simple Definitions:
+###  Simple Definitions:
 - **Kernel**: The main part of Android that controls all hardware like screen, memory, and camera.
 - **Device Tree (DTB)**: A file that tells Android what hardware is inside the device and how it is connected.
 
 ---
 
-## ✅ 3. Kernel (Simplified)
+##  3. Kernel (Simplified)
 
 - The **kernel** is the **main part of Android** that talks to the hardware.
 - Based on the **Linux kernel**.
@@ -159,8 +159,43 @@ Because of its flexibility and wide device support, Android is the **most used m
 - Zygote is a **special process** started by init.
 - It runs inside the **Android Runtime (ART)** or **Dalvik Virtual Machine (DVM)**.
 - ART or Dalvik is used to run Android apps written in **Java** or **Kotlin**.
+  ## ✅ What is a Virtual Machine?
 
-### 🛠️ What Zygote Does:
+A **Virtual Machine (VM)** is like a **translator** between your app and your phone’s hardware.
+
+- Android apps are written in **Java/Kotlin**, which is **not directly understood by hardware**.
+- The VM **converts app code** into instructions that the hardware (CPU) can understand.
+
+---
+
+## Dalvik Virtual Machine (DVM)
+
+- **Dalvik** was the **original virtual machine** used in Android (before Android 5.0 Lollipop).
+- It ran apps by **interpreting `.dex` (Dalvik Executable)** files.
+- Dalvik used **Just-In-Time (JIT)** compilation:
+
+   **JIT (Just-In-Time)** = Code is compiled **while the app runs**  
+   This can be **slower** and **use more battery**
+
+---
+
+##  ART (Android Runtime)
+
+- **ART** replaced Dalvik in **Android 5.0 and above**.
+- ART uses **Ahead-Of-Time (AOT)** compilation:
+
+   **AOT (Ahead-Of-Time)** = Apps are **compiled into machine code before they run**, during installation.
+
+- This makes apps:
+
+  - Start faster
+  - Run more efficiently
+  - Use more storage space (because compiled code is saved)
+
+---
+
+
+### What Zygote Does:
 
 - Creates new app processes using `fork()` only when needed.
 - Helps apps launch **faster**, even if reopened after closing.
