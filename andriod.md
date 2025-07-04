@@ -103,6 +103,10 @@ Because of its flexibility and wide device support, Android is the **most used m
 ## Andriod booting process
 ---
 
+   ![WhatsApp Image 2025-07-04 at 09 36 05_08c7ab05](https://github.com/user-attachments/assets/5db9cdf4-f672-4f2a-b20c-8ed2cb27ee07)
+
+   
+
 ## 1. Boot ROM
 
 - **Boot ROM** stands for **Boot Read-Only Memory**.
