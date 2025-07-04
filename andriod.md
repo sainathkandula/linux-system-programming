@@ -106,6 +106,7 @@ Because of its flexibility and wide device support, Android is the **most used m
 ## 1. Boot ROM
 
 - **Boot ROM** stands for **Boot Read-Only Memory**.
+- It’s stored in Read-Only Memory (ROM) of the SoC.
 - It is the **first code** that runs when the device is powered on.
 - It initializes minimal hardware like **RAM** and **clocks**.
 - Then, it **loads the bootloader** from storage.
@@ -268,7 +269,7 @@ System services are **background helpers** that perform critical tasks like:
 - Checks basic hardware (like RAM, CPU, keyboard).
 - Then it **finds and loads the bootloader** from a storage device (like HDD or SSD).
 
->  **Think of BIOS as the gatekeeper that starts the whole system.**
+
 
 ---
 
@@ -289,7 +290,7 @@ System services are **background helpers** that perform critical tasks like:
   - Mounts the **root filesystem `/`**.
   - Starts the **init process** (or systemd).
 
-> **The kernel is like the engine of a car — it powers the whole system.**
+
 
 ---
 
@@ -304,7 +305,7 @@ System services are **background helpers** that perform critical tasks like:
 - **login manager** – to allow user login
 - **cron** – for scheduled tasks
 
->  **Think of it as the manager that opens all departments after the building is powered.**
+
 
 ---
 
@@ -329,11 +330,11 @@ System services are **background helpers** that perform critical tasks like:
 | Stage         | Component          | Description                                |
 |---------------|--------------------|--------------------------------------------|
 | BIOS/UEFI     | Firmware           | Hardware check and load bootloader         |
-| Bootloader    | GRUB, LILO         | Loads the Linux kernel                     |
+| Bootloader    | GRUB               | Loads the Linux kernel                     |
 | Kernel        | Linux Kernel       | Initializes hardware and mounts filesystem |
 | Init/Systemd  | PID 1 Process      | Starts services and daemons                |
-| Login Manager | getty/gdm/lightdm | Authenticates user login                   |
-| User Interface| GNOME/KDE/CLI      | Final interface for user interaction       |
+| Login Manager | getty/gdm/lightdm  | Authenticates user login                   |
+| User Interface| GNOME/KDE/         | Final interface for user interaction       |
 
 ---
 
