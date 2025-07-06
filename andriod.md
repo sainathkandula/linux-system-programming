@@ -176,7 +176,7 @@ A **Virtual Machine (VM)** is like a **translator** between your app and your ph
 ## Dalvik Virtual Machine (DVM)
 
 - **Dalvik** was the **original virtual machine** used in Android (before Android 5.0 Lollipop).
-- It ran apps by **interpreting `.dex` (Dalvik Executable)** files.
+
 - Dalvik used **Just-In-Time (JIT)** compilation:
 
    **JIT (Just-In-Time)** = Code is compiled **while the app runs**  
@@ -205,6 +205,10 @@ A **Virtual Machine (VM)** is like a **translator** between your app and your ph
 - Creates new app processes using `fork()` only when needed.
 - Helps apps launch **faster**, even if reopened after closing.
 - Common system libraries and UI parts are **preloaded**, so apps don't start from scratch.
+
+  **how it works**   :
+  Zygote is a special process that starts early in the Android boot process, launched by the init system. It runs inside the Android Runtime (ART) and acts as a parent process for all Android applications. Zygote preloads essential system classes and resources, and when an app needs to start, it quickly forks itself to create a new process. This approach reduces startup time and improves performance, because shared system components are already loaded. It's a core part of Android’s app-launch efficiency.
+  
 
 ###  Without Zygote:
 If Android didn't use Zygote:
@@ -268,7 +272,7 @@ System services are **background helpers** that perform critical tasks like:
 
 ##  1. BIOS / UEFI
 
-- BIOS (Basic Input/Output System) or UEFI is the **first code** that runs when the computer is powered on.
+- BIOS (Basic Input/Output System) or UEFI(Unified Extensible Firmware Interface). is the **first code** that runs when the computer is powered on.
 - It is **built into the motherboard** by the manufacturer.
 - Checks basic hardware (like RAM, CPU, keyboard).
 - Then it **finds and loads the bootloader** from a storage device (like HDD or SSD).
