@@ -23,7 +23,7 @@ Linux booting starts with BIOS or UEFI, then loads a bootloader like GRUB, follo
 ###  Q: What happens if the Zygote process fails to start?
 **A:** The system cannot launch apps, and Android will fail to boot to the home screen.
 
-### 9. What is Binder in Android?
+### Q :What is Binder in Android?
 
 **Binder** is Android’s **IPC (Inter-Process Communication)** mechanism.  
 It allows different **apps**, **services**, or **system components** to communicate with each other **safely and efficiently**, even if they run in **separate processes**.
