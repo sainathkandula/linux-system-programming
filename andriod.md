@@ -99,6 +99,83 @@ Because of its flexibility and wide device support, Android is the **most used m
 
 
 ---
+## Linux Booting Process
+
+##  1. BIOS / UEFI
+
+- BIOS (Basic Input/Output System) or UEFI(Unified Extensible Firmware Interface). is the **first code** that runs when the computer is powered on.
+- It is **built into the motherboard** by the manufacturer.
+- Checks basic hardware (like RAM, CPU, keyboard).
+- Then it **finds and loads the bootloader** from a storage device (like HDD or SSD).
+
+
+
+---
+
+## 2. Bootloader (GRUB)
+
+- The **bootloader** is a small program that loads the **Linux kernel** into memory.
+- Common bootloaders: **GRUB** (most popular).
+- It may offer a menu to choose different OS versions (e.g., Ubuntu, Windows).
+
+---
+
+##  3. Kernel
+
+- The **Linux kernel** is the **core of the operating system**.
+- It gets loaded into memory by the bootloader.
+- The kernel:
+  - Manages the **CPU, memory, devices, and file system**.
+  - Mounts the **root filesystem `/`**.
+  - Starts the **init process** (or systemd).
+
+
+
+---
+
+##  4. Init Process (or systemd)
+
+- This is the **first user-space program**, with process ID 1 (**PID 1**).
+- Older systems used `init`; modern systems use **systemd**.
+- It starts all the necessary **services and background processes**.
+
+###  Examples of services started:
+- **networking** – to connect to internet
+- **login manager** – to allow user login
+- **cron** – for scheduled tasks
+
+
+
+---
+
+## 5. Login Manager
+
+- After services are started, the system shows a **login screen or console prompt**.
+- The user enters their **username and password**.
+- Once authenticated, the system loads the **user session**.
+
+>  **It’s like checking in at a hotel — you provide credentials before accessing your room.**
+
+---
+
+## 6. Desktop Environment
+
+- If it’s a desktop system, it shows a **graphical interface** (like **GNOME** or **KDE**).
+
+---
+
+##  Summary Table of Linux Boot Components
+
+| Stage         | Component          | Description                                |
+|---------------|--------------------|--------------------------------------------|
+| BIOS/UEFI     | Firmware           | Hardware check and load bootloader         |
+| Bootloader    | GRUB               | Loads the Linux kernel                     |
+| Kernel        | Linux Kernel       | Initializes hardware and mounts filesystem |
+| Init/Systemd  | PID 1 Process      | Starts services and daemons                |
+| Login Manager | getty/gdm/lightdm  | Authenticates user login                   |
+| User Interface| GNOME/KDE/         | Final interface for user interaction       |
+
+---
 
 ## Andriod booting process
 ---
@@ -268,83 +345,7 @@ System services are **background helpers** that perform critical tasks like:
 ---
 
 
-## Linux Booting Process
 
-##  1. BIOS / UEFI
-
-- BIOS (Basic Input/Output System) or UEFI(Unified Extensible Firmware Interface). is the **first code** that runs when the computer is powered on.
-- It is **built into the motherboard** by the manufacturer.
-- Checks basic hardware (like RAM, CPU, keyboard).
-- Then it **finds and loads the bootloader** from a storage device (like HDD or SSD).
-
-
-
----
-
-## 2. Bootloader (GRUB or LILO)
-
-- The **bootloader** is a small program that loads the **Linux kernel** into memory.
-- Common bootloaders: **GRUB** (most popular).
-- It may offer a menu to choose different OS versions (e.g., Ubuntu, Windows).
-
----
-
-##  3. Kernel
-
-- The **Linux kernel** is the **core of the operating system**.
-- It gets loaded into memory by the bootloader.
-- The kernel:
-  - Manages the **CPU, memory, devices, and file system**.
-  - Mounts the **root filesystem `/`**.
-  - Starts the **init process** (or systemd).
-
-
-
----
-
-##  4. Init Process (or systemd)
-
-- This is the **first user-space program**, with process ID 1 (**PID 1**).
-- Older systems used `init`; modern systems use **systemd**.
-- It starts all the necessary **services and background processes**.
-
-###  Examples of services started:
-- **networking** – to connect to internet
-- **login manager** – to allow user login
-- **cron** – for scheduled tasks
-
-
-
----
-
-## 5. Login Manager
-
-- After services are started, the system shows a **login screen or console prompt**.
-- The user enters their **username and password**.
-- Once authenticated, the system loads the **user session**.
-
->  **It’s like checking in at a hotel — you provide credentials before accessing your room.**
-
----
-
-## 6. Desktop Environment
-
-- If it’s a desktop system, it shows a **graphical interface** (like **GNOME** or **KDE**).
-
----
-
-##  Summary Table of Linux Boot Components
-
-| Stage         | Component          | Description                                |
-|---------------|--------------------|--------------------------------------------|
-| BIOS/UEFI     | Firmware           | Hardware check and load bootloader         |
-| Bootloader    | GRUB               | Loads the Linux kernel                     |
-| Kernel        | Linux Kernel       | Initializes hardware and mounts filesystem |
-| Init/Systemd  | PID 1 Process      | Starts services and daemons                |
-| Login Manager | getty/gdm/lightdm  | Authenticates user login                   |
-| User Interface| GNOME/KDE/         | Final interface for user interaction       |
-
----
 
 
 
